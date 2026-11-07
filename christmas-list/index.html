@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<title>Brian's Christmas Wish List</title>
+<title>Brian’s Wish List 2026</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -41,6 +41,7 @@ h1 .spark{color:var(--gold)}
 .sub{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin-top:12px;color:var(--muted);font-size:14px}
 .sub b{color:var(--fg);font-variant-numeric:tabular-nums}
 .countdown{font-family:var(--display);color:var(--accent);font-size:15px}
+.countdown .n{font-family:var(--body);font-weight:700;font-variant-numeric:tabular-nums}
 
 /* toolbar */
 .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-block:6px 18px}
@@ -120,7 +121,7 @@ footer{color:var(--muted);font-size:13px;padding-block:0 40px}
     <div class="sub">
       <span><b id="count"><!--S:count-->41<!--/S:count--></b> wishes</span>
       <span><b id="stores-count"><!--S:stores-->23<!--/S:stores--></b> stores</span>
-      <span class="countdown" id="countdown">Christmas morning · Dec 25</span>
+      <span class="countdown" id="countdown">Christmas morning · Dec <span class="n">25</span></span>
     </div>
   </header>
 
@@ -344,7 +345,7 @@ function fill(html, P){ return html.replace(/<!--S:(\w+)-->[\s\S]*?<!--\/S:\1-->
 function renderCountdown(){
   var now = new Date(), y = now.getFullYear(); if (now > new Date(y, 11, 26)) y++;
   var days = Math.ceil((new Date(y, 11, 25) - new Date(now.getFullYear(), now.getMonth(), now.getDate())) / 864e5);
-  $("countdown").textContent = days <= 0 ? "Merry Christmas!" : days + (days === 1 ? " sleep" : " sleeps") + " till Christmas";
+  $("countdown").innerHTML = days <= 0 ? "Merry Christmas!" : '<span class="n">' + days + "</span>" + (days === 1 ? " sleep" : " sleeps") + ' till Christmas · Dec <span class="n">25</span>';
 }
 function renderAll(){
   var on = document.querySelector(".fr:checked"), keep = on ? on.id : "f-all";
