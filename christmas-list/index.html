@@ -1,0 +1,442 @@
+<title>Brian's Christmas Wish List</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: string-light header band, then a filterable grid of pixel-icon gift cards; owner-only editor slides in above the grid. */
+:root{
+  --bg:#edf3f0; --fg:#1b2a23; --muted:#56695f; --card:#ffffff; --line:#cddbd4;
+  --accent:#bf2f2c; --pine:#1f5c43; --gold:#b8891f; --chip:#e3ece8;
+  --tile-a:#1f5c43; --tile-b:#8e1f2b; --tile-c:#24456b;
+  --display:"Pixelify Sans","Courier New",monospace;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --shadow:0 1px 0 rgba(20,40,30,.06),0 6px 18px -10px rgba(20,40,30,.25);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1b16; --fg:#ecf3ee; --muted:#9bb2a6; --card:#15281f; --line:#27423a;
+  --accent:#ff6a5f; --pine:#74d29c; --gold:#f2c14e; --chip:#1d3429;
+  --shadow:0 1px 0 rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.7); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1b16; --fg:#ecf3ee; --muted:#9bb2a6; --card:#15281f; --line:#27423a;
+  --accent:#ff6a5f; --pine:#74d29c; --gold:#f2c14e; --chip:#1d3429;
+  --shadow:0 1px 0 rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.7); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* header */
+header{padding-block:28px 18px}
+.lights{height:22px;position:relative;margin-bottom:18px;
+  background:radial-gradient(circle at 50% 0,transparent 0 9px,var(--line) 9px 10px,transparent 10px) 0 -2px/36px 18px repeat-x}
+.lights i{position:absolute;top:8px;width:8px;height:12px;border-radius:0;
+  box-shadow:0 0 10px currentColor;background:currentColor;animation:twinkle 2.4s steps(2) infinite}
+@keyframes twinkle{50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.lights i{animation:none}}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(30px,6vw,54px);line-height:1.02;margin:0;letter-spacing:.01em;text-wrap:balance}
+h1 .spark{color:var(--gold)}
+.sub{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin-top:12px;color:var(--muted);font-size:14px}
+.sub b{color:var(--fg);font-variant-numeric:tabular-nums}
+.countdown{font-family:var(--display);color:var(--accent);font-size:15px}
+
+/* toolbar */
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-block:6px 18px}
+.chip{font:600 13px/1 var(--body);border:1px solid var(--line);background:var(--chip);color:var(--fg);padding:8px 12px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.chip:focus-visible,.btn:focus-visible,.store:focus-visible,.iconpick button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.spacer{flex:1}
+.btn{font:700 14px/1 var(--body);border:0;border-radius:10px;padding:11px 16px;cursor:pointer;background:var(--accent);color:#fff}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.btn.small{padding:7px 10px;font-size:12px;border-radius:8px}
+.status{font-size:13px;color:var(--muted);min-height:1em}
+
+/* editor */
+.editor{background:var(--card);border:2px solid var(--fg);border-radius:14px;padding:18px;margin-bottom:22px;display:grid;grid-template-columns:120px 1fr;gap:18px}
+.editor h2{font-family:var(--display);margin:0 0 4px;font-size:22px;grid-column:1/-1}
+.preview{display:flex;flex-direction:column;align-items:center;gap:8px}
+.preview .tile{width:112px;height:112px}
+.preview small{color:var(--muted);font-size:12px;text-align:center}
+.fields{display:grid;gap:12px;min-width:0}
+label{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:grid;gap:5px}
+input[type=text],textarea{font:15px/1.4 var(--body);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:10px 12px;width:100%}
+textarea{min-height:84px;resize:vertical}
+.check{flex-direction:row;display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:14px;color:var(--fg);font-weight:600}
+.iconpick{display:flex;flex-wrap:wrap;gap:6px}
+.iconpick button{width:42px;height:42px;padding:3px;border:2px solid transparent;border-radius:8px;background:var(--chip);cursor:pointer}
+.iconpick button[aria-pressed="true"]{border-color:var(--accent)}
+.iconpick button img{width:100%;height:100%;image-rendering:pixelated}
+.iconpick .auto{width:auto;padding:0 10px;font:700 12px var(--body);color:var(--fg)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+@media (max-width:560px){.editor{grid-template-columns:1fr}.preview{flex-direction:row}}
+
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;padding-bottom:48px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;grid-template-columns:88px 1fr;gap:14px;box-shadow:var(--shadow);position:relative}
+.card.top{border-color:var(--gold)}
+.tile{width:88px;height:88px;border-radius:10px;display:grid;place-items:center;position:relative;overflow:hidden;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.14),inset 0 -6px 0 rgba(0,0,0,.18)}
+.tile.a{background:var(--tile-a)} .tile.b{background:var(--tile-b)} .tile.c{background:var(--tile-c)}
+.tile img{width:84%;height:84%;image-rendering:pixelated;image-rendering:crisp-edges}
+.body{min-width:0;display:grid;gap:6px;align-content:start}
+.title{font-weight:700;font-size:16px;line-height:1.25;margin:0;text-wrap:balance;overflow-wrap:anywhere}
+.note{color:var(--muted);font-size:13.5px;margin:0;overflow-wrap:anywhere}
+.badges{display:flex;flex-wrap:wrap;gap:6px}
+.badge{font:700 11px/1 var(--display);letter-spacing:.04em;padding:4px 7px;border-radius:5px;background:var(--chip);color:var(--muted)}
+.badge.top{background:var(--gold);color:#1b1404}
+.stores{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.store{display:inline-flex;align-items:center;gap:5px;font:600 12.5px/1 var(--body);color:var(--fg);text-decoration:none;border:1px solid var(--line);padding:7px 9px;border-radius:8px;background:var(--bg);max-width:100%}
+.store:hover{border-color:var(--accent);color:var(--accent)}
+.store svg{flex:none}
+.store span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.owner{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0}
+footer{color:var(--muted);font-size:13px;padding-block:0 40px}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="lights" id="lights" aria-hidden="true"></div>
+    <h1>Brian's Christmas Wish List <span class="spark">✨</span></h1>
+    <div class="sub">
+      <span><b id="count">0</b> wishes</span>
+      <span><b id="stores-count">0</b> stores</span>
+      <span class="countdown" id="countdown"></span>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="row" id="filters" role="group" aria-label="Filter by category"></div>
+    <span class="spacer"></span>
+    <span class="status" id="status" aria-live="polite"></span>
+    <button class="btn" id="add-btn" type="button" hidden>+ Add a wish</button>
+  </div>
+
+  <form class="editor" id="editor" hidden>
+    <h2 id="editor-title">Add a wish</h2>
+    <div class="preview">
+      <div class="tile a" id="preview-tile"><img id="preview-img" alt=""></div>
+      <small id="preview-label">Gift box</small>
+    </div>
+    <div class="fields">
+      <label for="f-title">What do you want?
+        <input type="text" id="f-title" placeholder="e.g. Brown leather watch roll" required autocomplete="off"></label>
+      <label for="f-note">Details (size, color, engraving)
+        <input type="text" id="f-note" placeholder="e.g. Size 13, warm brown" autocomplete="off"></label>
+      <label for="f-links">Store links, one per line
+        <textarea id="f-links" placeholder="https://store.com/product&#10;Optional label | https://other-store.com/item"></textarea></label>
+      <div>
+        <label>Pixel icon</label>
+        <div class="iconpick" id="iconpick"></div>
+      </div>
+      <label class="check" for="f-top"><input type="checkbox" id="f-top"> Top pick</label>
+      <div class="row">
+        <button class="btn" type="submit" id="f-save">Save wish</button>
+        <button class="btn ghost" type="button" id="f-cancel">Cancel</button>
+      </div>
+    </div>
+  </form>
+
+  <main class="grid" id="grid" aria-live="polite"></main>
+  <footer>Tap a store button to open the item. Tracking codes are stripped from every link.</footer>
+</div>
+
+<script type="application/json" id="wish-data">
+{"items":[
+{"id":"w01","title":"Leather card holder","note":"Hermès H Sellier, either style","icon":"cardholder","top":false,"links":[{"url":"https://www.hermes.com/us/en/product/h-sellier-card-holder-H084991CA18/","label":"H Sellier"},{"url":"https://www.hermes.com/us/en/product/h-sellier-verso-card-holder-H084770CAAB/","label":"H Sellier Verso"}]},
+{"id":"w02","title":"Sapphire Omega Speedmaster","note":"Moonwatch, sapphire sandwich","icon":"watch","top":true,"links":[{"url":"https://www.chrono24.com/omega/omega-new-2026-speedmaster-moonwatch-sapphire-31030425001002--id22551085.htm","label":"Example listing"}]},
+{"id":"w03","title":"Cozy moccasin slippers","note":"Brown","icon":"slipper","top":false,"links":[{"url":"https://www.llbean.com/llb/shop/503380?itemId=264593&attrValue_0=Brown&sku=0JKU204110","label":""},{"url":"https://www.questoutdoors.com/products/barbour-ms-monty?variant=42584008556618","label":"Barbour Monty"}]},
+{"id":"w04","title":"Buck Mason gift card","note":"","icon":"giftcard","top":false,"links":[{"url":"https://www.buckmason.com/","label":""}]},
+{"id":"w05","title":"Any cool gadget from The James Brand","note":"Knives, lights, carry tools","icon":"knife","top":false,"links":[{"url":"https://www.thejamesbrand.com/","label":""}]},
+{"id":"w06","title":"Engraved YETI","note":"Tumbler or mug with custom engraving","icon":"tumbler","top":false,"links":[{"url":"https://www.yeti.com/","label":""}]},
+{"id":"w07","title":"Fellow engraved travel mug","note":"Carter Slide Mug","icon":"travelmug","top":false,"links":[{"url":"https://fellowproducts.com/collections/travel-mugs/products/carter-slide-mug?variant=45567740641380","label":""}]},
+{"id":"w08","title":"Anything from the Huckberry gear page","note":"Literally anything","icon":"compass","top":false,"links":[{"url":"https://huckberry.com/store/t/category/gear","label":"Gear page"}]},
+{"id":"w09","title":"Stackable steel storage box","note":"TOYO T-150","icon":"toolbox","top":false,"links":[{"url":"https://huckberry.com/store/toyo/category/p/97210-steel-stackable-storage-box-t-150","label":""}]},
+{"id":"w10","title":"YETI GoBox","note":"","icon":"gobox","top":false,"links":[{"url":"https://www.yeti.com/cases-storage/hard-cases/26010000555.html","label":""}]},
+{"id":"w11","title":"Casual sneakers","note":"Size 13 · Morgen Trainers, leather & suede","icon":"sneaker","top":false,"links":[{"url":"https://www.beckettsimonon.com/products/morgen-trainers-leather-suede","label":""}]},
+{"id":"w12","title":"Hermès tie","note":"","icon":"tie","top":false,"links":[{"url":"https://www.hermes.com/us/en/","label":""}]},
+{"id":"w13","title":"Eames office chair","note":"Warm brown leather","icon":"chair","top":true,"links":[{"url":"https://www.hermanmiller.com/products/seating/office-chairs/eames-executive-chairs/","label":""}]},
+{"id":"w14","title":"UGG slippers","note":"","icon":"ugg","top":false,"links":[{"url":"https://www.ugg.com/","label":""}]},
+{"id":"w15","title":"Stanley shaker bottle","note":"Vitalize Shaker Bottle, 20 oz","icon":"shaker","top":false,"links":[{"url":"https://www.stanley1913.com/products/vitalize-shaker-bottle-20-oz?variant=53973001404776","label":""}]},
+{"id":"w16","title":"Bennett Winch suit carrier holdall","note":"Brown leather duffle","icon":"duffle","top":false,"links":[{"url":"https://bennettwinch.com/","label":""}]},
+{"id":"w17","title":"Triple watch roll","note":"Brown leather","icon":"watchroll","top":false,"links":[{"url":"https://bennettwinch.com/","label":""}]},
+{"id":"w18","title":"Louis Vuitton Slender Wallet","note":"Monogram","icon":"wallet","top":false,"links":[{"url":"https://us.louisvuitton.com/eng-us/products/slender-wallet-monogram-other-nvprod7910016v/M29742","label":""}]},
+{"id":"w19","title":"Louis Vuitton Double Card Holder","note":"Winter white","icon":"wallet-white","top":false,"links":[{"url":"https://us.louisvuitton.com/eng-us/products/double-card-holder-monogram-other-nvprod6260076v/M14864","label":""}]},
+{"id":"w20","title":"Louis Vuitton Pocket Organizer","note":"","icon":"wallet","top":false,"links":[{"url":"https://us.louisvuitton.com/eng-us/products/pocket-organizer-monogram-other-nvprod7910015v/M29593","label":""}]},
+{"id":"w21","title":"Louis Vuitton Multiple Wallet","note":"I need a new wallet!","icon":"wallet-graphite","top":true,"links":[{"url":"https://us.louisvuitton.com/eng-us/products/multiple-wallet-g74-nvprod7540380v/M3A832","label":""}]},
+{"id":"w22","title":"Anything from the Huckberry gift shop","note":"Stocking stuffers","icon":"stocking","top":false,"links":[{"url":"https://huckberry.com/store/stocking-stuffers","label":"Stocking stuffers"}]},
+{"id":"w23","title":"Omega Seamaster or Aqua Terra, pre-owned","note":"From Bob's Watches, ideally with box and papers","icon":"seamaster","top":false,"links":[{"url":"https://www.bobswatches.com/omega/seamaster-1.html","label":""}]},
+{"id":"w24","title":"WDT tool for coffee","note":"iKape tamper + distributor set","icon":"tamper","top":false,"links":[{"url":"https://ikapestore.com/products/ikape-impact-coffee-tamper-dual-bearing-distributor-set?variant=52958830887211","label":""}]}
+]}
+</script>
+
+<script id="app-main">
+(function(){
+"use strict";
+/* ---------- snapshot pristine page source (before any render) for self-publishing ---------- */
+var SOURCE = [];
+(function(){
+  var nodes = document.body.childNodes;
+  for (var i = 0; i < nodes.length; i++) {
+    var n = nodes[i];
+    if (n.nodeType === 1) {
+      SOURCE.push(n.id === "wish-data" ? {data:true} : n.outerHTML);
+      if (n.id === "app-main") break;
+    } else if (n.nodeType === 3) {
+      SOURCE.push(n.textContent.replace(/[<>&]/g, ""));
+    } else if (n.nodeType === 8) {
+      SOURCE.push("<!--" + n.data + "-->");
+    }
+  }
+})();
+var RESET_FALLBACK = ":root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}";
+
+var state = JSON.parse(document.getElementById("wish-data").textContent);
+
+/* ---------- pixel palette + icons (16x16) ---------- */
+var PAL = {
+  k:"#2b1d1a", w:"#f7f4ee", g:"#b9c0c7", G:"#5f6670", r:"#d63c3c", R:"#8e1f2b",
+  o:"#e8772e", O:"#a84a1a", b:"#8a5a3b", B:"#5a3523", t:"#c99a6b", y:"#f2c14e",
+  n:"#1f3a68", u:"#3d7bd9", e:"#2f9a52", E:"#1e5c33", c:"#efe2c4", m:"#6b4a2f",
+  M:"#c8a26a", s:"#dfe5ea", l:"#7cc4d8", d:"#1a1a1e", x:"#3a3a40"
+};
+var WATCH = ["......kxxxxk....","......kxxxxk....","......kxxxxk....","....kkkkkkkk....","...kssssssssk...","..kskddddddddsk.".slice(0,16),"..ksdwddddwdsk..","..ksdddwddddsk..","..kswddwwddwsks.","..ksddddddddsk..","..ksdwddddwdsk..","..ksddddddddsk..","...kssssssssk...","....kkkkkkkk....","......kxxxxk....","......kxxxxk...."];
+WATCH[5] = "..ksddddddddsk..";
+var WALLET = ["................","................","................","................",".kkkkkkkkkkkkkk.",".kmmmmmmmmmmmmk.",".kmMmmmMmmmMmmk.",".kmmmmmmmmmmmmk.",".kmmmMmmmMmmmMk.",".kkkkkkkkkkkkkk.",".kmMmmmMmmmMmmk.",".kmmmmmmmmmmmmk.",".kmmmMmmmMmmmMk.",".kkkkkkkkkkkkkk.","................","................"];
+var SLIPPER = ["................","................","................","................","..kkkk..........",".kcccck.........",".kccccck........",".kbbbbbbkkkk....",".kbbbbbbbttbkk..",".kbbbbbbbbbbbbk.",".kbbbbbbbbbbbbbk",".kBBBBBBBBBBBBBk","..kkkkkkkkkkkkk.","................","................","................"];
+var ICONS = {
+  gift:{label:"Gift box",cat:"stuff",grid:["................","................","....kkk..kkk....","...krrrkkrrrk...","....kkkrrkkk....",".kkkkkkrrkkkkkk.",".keeeeerreeeeek.",".kEEEEErrEEEEEk.","..keeeerreeeek..","..keeeerreeeek..","..keeeerreeeek..","..keeeerreeeek..","..keeeerreeeek..","..kkkkkkkkkkkk..","................","................"]},
+  cardholder:{label:"Card holder",cat:"leather",grid:["................","................","....kkkkkkkk....","....kwwwwwwk....","..kkkkkkkkkkkk..","..kooooooooook..","..kOOOOOOOOOOk..","..kooooooooook..","..koooyooyoook..","..koooyyyyoook..","..koooyooyoook..","..kooooooooook..","..kOOOOOOOOOOk..","..kkkkkkkkkkkk..","................","................"]},
+  watch:{label:"Watch",cat:"watches",grid:WATCH},
+  seamaster:{label:"Dive watch",cat:"watches",grid:WATCH,pal:{d:"#1f4fa0",x:"#c3cad1"}},
+  slipper:{label:"Moccasin",cat:"wear",grid:SLIPPER},
+  ugg:{label:"Sheepskin slipper",cat:"wear",grid:SLIPPER,pal:{b:"#c58b4f",B:"#8f5e2e",c:"#f6ecd9",t:"#e2b986"}},
+  giftcard:{label:"Gift card",cat:"stuff",grid:["................",".....rr.rr......","......rrr.......",".kkkkkkkkkkkkkk.",".knnnnrrnnnnnnk.",".knnnnrrnnnnnnk.",".krrrrrrrrrrrrk.",".knnnnrrnnnnnnk.",".knnnnrrnnyyynk.",".knnnnrrnnnnnnk.",".knnnnrrnyyyynk.",".knnnnrrnnnnnnk.",".kkkkkkkkkkkkkk.","................","................","................"]},
+  knife:{label:"Pocket knife",cat:"gear",grid:["................","................","................","................","................","..........kk....","........kkssk...","......kksssssk..",".kkkkkksssssssk.","kGGGGGGksssskk..","kGyGGGGkkkkk....",".kkkkkkk........","................","................","................","................"]},
+  tumbler:{label:"Tumbler",cat:"coffee",grid:["................","................","...kkkkkkkkkk...","..kGGGGGGGGGGk..","..kkkkkkkkkkkk..","...kllllllllk...","...kllllllllk...","...kllwwwwllk...","...kllwllwllk...","....kllllllk....","....kllllllk....","....kllllllk....","....kllllllk....","....kkkkkkkk....","................","................"]},
+  travelmug:{label:"Travel mug",cat:"coffee",grid:["................",".....kkkkkk.....","....kssssssk....","....kkkkkkkk....","....kGGGGGGk....","....kGGGGGGk....","....kGGGGGGk....","....kGwwwwGk....","....kGGGGGGk....","....kGGGGGGk....","....kGGGGGGk....","....kGGGGGGk....","....kGGGGGGk....","....kkkkkkkk....","................","................"]},
+  shaker:{label:"Shaker bottle",cat:"coffee",grid:["................","......kkkk......",".....kGGGGk.....","....kkkkkkkk....","....keeeeeek....","....keeeeeek....","....keeeeeek....","....keeeeeek....","....kewwwwek....","....keeeeeek....","....keeeeeek....","....keeeeeek....","....keeeeeek....","....kkkkkkkk....","................","................"]},
+  compass:{label:"Compass",cat:"gear",grid:["................","................","......kkkk......","....kkyyyykk....","...kyywwwwyyk...","..kywwwwrwwwyk..","..kywwwrrwwwyk..",".kywwwwrrwwwwyk.",".kywwwwkkwwwwyk.",".kywwwwGGwwwwyk.","..kywwwGGwwwyk..","..kywwwGwwwwyk..","...kyywwwwyyk...","....kkyyyykk....","......kkkk......","................"]},
+  toolbox:{label:"Storage box",cat:"gear",grid:["................","................","................","................","......kkkk......",".....k....k.....",".kkkkkkkkkkkkkk.",".krrrrrrrrrrrrk.",".kRRRRRRRRRRRRk.",".kkkkkkkkkkkkkk.",".krrrrrrrrrrrrk.",".krrrrrkkrrrrrk.",".krrrrrrrrrrrrk.",".kkkkkkkkkkkkkk.","................","................"]},
+  gobox:{label:"Gear case",cat:"gear",grid:["................","................","................","................","......kkkk......",".kkkkkkkkkkkkkk.",".kggggggggggggk.",".kggkkggggkkggk.",".kGGkkGGGGkkGGk.",".kggggggggggggk.",".kggggggggggggk.",".kggggggggggggk.",".kGGGGGGGGGGGGk.",".kkkkkkkkkkkkkk.","................","................"]},
+  sneaker:{label:"Sneaker",cat:"wear",grid:["................","................","................","................","................","................","....kkkk........","...kwwwwk.......","...kwtwtwkk.....","..kwwwwwwwwkk...",".kwwwwwwwwwwwk..",".kttwwwwwwwwwwk.",".kggggggggggggk.","..kkkkkkkkkkkk..","................","................"]},
+  tie:{label:"Silk tie",cat:"leather",grid:["................","......kkkk......",".....kooook.....","......kook......",".....koyook.....",".....koooyk.....","....kooyoook....","....koooooyk....","....kyoooook....","...kooyoooook...","...koooooyook...","...kooyoooook...","....kooooook....",".....kooook.....","......kkkk......","................"]},
+  chair:{label:"Office chair",cat:"gear",grid:["................","....kkkkkkkk....","...kbbbbbbbbk...","...kBBBBBBBBk...","...kbbbbbbbbk...","...kBBBBBBBBk...",".kskbbbbbbbbksk.",".kskBBBBBBBBksk.",".ksskkkkkkkkssk.","..kbbbbbbbbbbk..","..kkkkkkkkkkkk..","......ksk.......","......ksk.......","..kssssssssssk..","..k....kk....k..","................"]},
+  duffle:{label:"Duffle bag",cat:"leather",grid:["................","................","................",".....kkkkkk.....","....kBk..kBk....","..kkkBkkkkBkkk..",".kbbbbbbbbbbbbk.",".kbyyyyyyyyyybk.","kbbbbbbbbbbbbbbk","kbbbbbbbbbbbbbbk","kbbtbbbbbbbbtbbk","kbbbbbbbbbbbbbbk","kBBBBBBBBBBBBBBk",".kkkkkkkkkkkkkk.","................","................"]},
+  watchroll:{label:"Watch roll",cat:"watches",grid:["................","................","................","................","................","..kkkkkkkkkkkk..",".kbbbbbyybbbbbk.","kbbtbbbBBbbbbbbk","kbbbbbbBBbbbbbbk","kBBBBBByyBBBBBBk",".kBBBBBBBBBBBBk.","..kkkkkkkkkkkk..","................","................","................","................"]},
+  wallet:{label:"Wallet",cat:"leather",grid:WALLET},
+  "wallet-white":{label:"Cream wallet",cat:"leather",grid:WALLET,pal:{m:"#efe8da",M:"#b8a27a"}},
+  "wallet-graphite":{label:"Graphite wallet",cat:"leather",grid:WALLET,pal:{m:"#3b3f45",M:"#7b8088"}},
+  stocking:{label:"Stocking",cat:"stuff",grid:["................","...kkkkkkk......","...kwwwwwk......","...kwwwwwk......","...kkkkkkk......","...krrrrrk......","...krrrrrk......","...krrwrrk......","...krrrrrk......","...krrrrrrk.....","..krrrrrrrrkk...",".krrrrrrrrrrrk..",".krrrrrrwrrrrk..","..krrrrrrrrrk...","...kkkkkkkkk....","................"]},
+  tamper:{label:"Coffee tamper",cat:"coffee",grid:["................","................",".....kkkkkk.....","....kbbbbbbk....","....kbbbbbbk....",".....kbbbbk.....","......kssk......","......kssk......","...kkkkkkkkkk...","..kssssssssssk..","..kggggggggggk..","...kkkkkkkkkk...","................","................","................","................"]}
+};
+var ICON_ORDER = ["gift","watch","seamaster","watchroll","cardholder","wallet","wallet-white","wallet-graphite","tie","duffle","slipper","ugg","sneaker","tumbler","travelmug","shaker","tamper","knife","compass","toolbox","gobox","chair","giftcard","stocking"];
+var CATS = [["all","All"],["watches","Watches"],["leather","Leather & style"],["wear","Footwear"],["coffee","Mugs & coffee"],["gear","Gear & home"],["stuff","Gift cards & stuffers"]];
+var HOLLY = ["ee.ee","eErEe",".rRr."];
+
+function hash(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+var iconCache = {};
+function iconURL(key, seed){
+  var def = ICONS[key] || ICONS.gift; seed = seed || key;
+  var ck = key + "|" + seed; if (iconCache[ck]) return iconCache[ck];
+  var c = document.createElement("canvas"); c.width = 16; c.height = 16;
+  var x = c.getContext("2d"), pal = Object.assign({}, PAL, def.pal || {});
+  var filled = {};
+  def.grid.forEach(function(row, y){
+    row = (row + "................").slice(0, 16);
+    for (var i = 0; i < 16; i++) { var ch = row[i]; if (ch !== "." && pal[ch]) { x.fillStyle = pal[ch]; x.fillRect(i, y, 1, 1); filled[i+","+y] = 1; } }
+  });
+  // falling snow pixels on empty background
+  var h = hash(seed);
+  x.fillStyle = "rgba(255,255,255,.85)";
+  for (var s = 0; s < 6; s++) { h = Math.imul(h ^ (h >>> 13), 1274126177) >>> 0; var sx = h % 16, sy = (h >>> 8) % 16; if (!filled[sx+","+sy] && !(sx > 10 && sy < 3)) x.fillRect(sx, sy, 1, 1); }
+  // holly sprig, top-right corner
+  HOLLY.forEach(function(row, y){ for (var i = 0; i < row.length; i++) { var ch = row[i]; if (ch !== ".") { x.fillStyle = PAL[ch]; x.fillRect(11 + i, y, 1, 1); } } });
+  return (iconCache[ck] = c.toDataURL());
+}
+
+/* ---------- smart icon guess ---------- */
+var RULES = [
+  [/seamaster|aqua ?terra|dive watch/i,"seamaster"],[/watch ?(roll|case|box)/i,"watchroll"],
+  [/speedmaster|watch|rolex|omega|chrono|tudor|seiko/i,"watch"],[/card ?holder|card case/i,"cardholder"],
+  [/white wallet|cream/i,"wallet-white"],[/wallet|louisvuitton|louis vuitton|billfold/i,"wallet"],
+  [/\bugg/i,"ugg"],[/slipper|moccasin/i,"slipper"],[/gift ?card/i,"giftcard"],
+  [/knife|james ?brand|gadget|multi-?tool|flashlight/i,"knife"],[/go ?box|hard case|cooler/i,"gobox"],
+  [/storage|tool ?box|\bbox\b|crate/i,"toolbox"],[/shaker|bottle|stanley|flask/i,"shaker"],
+  [/tumbler|yeti|rambler/i,"tumbler"],[/mug|cup|thermos/i,"travelmug"],
+  [/tamper|\bwdt\b|coffee|espresso|grinder/i,"tamper"],[/sneaker|shoe|trainer|boot|loafer/i,"sneaker"],
+  [/\btie\b|bow tie|scarf/i,"tie"],[/chair|desk|eames|herman ?miller/i,"chair"],
+  [/duffle|duffel|holdall|bag|backpack|weekender/i,"duffle"],[/stocking|stuffer/i,"stocking"],
+  [/gear|huckberry|outdoor|compass|camp/i,"compass"]
+];
+function guessIcon(text){ for (var i = 0; i < RULES.length; i++) if (RULES[i][0].test(text)) return RULES[i][1]; return "gift"; }
+
+/* ---------- links ---------- */
+var STORES = {"hermes.com":"Hermès","chrono24.com":"Chrono24","llbean.com":"L.L.Bean","questoutdoors.com":"Quest Outdoors","buckmason.com":"Buck Mason","thejamesbrand.com":"The James Brand","yeti.com":"YETI","fellowproducts.com":"Fellow","huckberry.com":"Huckberry","beckettsimonon.com":"Beckett Simonon","hermanmiller.com":"Herman Miller","ugg.com":"UGG","stanley1913.com":"Stanley","bennettwinch.com":"Bennett Winch","louisvuitton.com":"Louis Vuitton","bobswatches.com":"Bob's Watches","ikapestore.com":"iKape","amazon.com":"Amazon","etsy.com":"Etsy","target.com":"Target","nordstrom.com":"Nordstrom","rei.com":"REI"};
+var JUNK = /^(utm_|gclid|gclsrc|gbraid|wbraid|gad_|fbclid|engineid|pcd|pla1|qs|tw_|nbt|nb_|campaign_id|ad_id|_ga|mc_|setlang|setcurr|country|currency|originalproduct|srsltid|ref_|igsh)/i;
+function cleanURL(raw){
+  try { var u = new URL(raw.trim()); if (!/^https?:$/.test(u.protocol)) return null;
+    Array.from(u.searchParams.keys()).forEach(function(k){ if (JUNK.test(k)) u.searchParams.delete(k); });
+    return u.toString(); } catch (e) { return null; }
+}
+function storeName(url){
+  try { var host = new URL(url).hostname.replace(/^www\./, "");
+    for (var d in STORES) if (host === d || host.slice(-d.length - 1) === "." + d) return STORES[d];
+    return host; } catch (e) { return "Link"; }
+}
+
+/* ---------- render ---------- */
+var $ = function(id){ return document.getElementById(id); };
+var filter = "all", canEdit = false, artifact = null, editingId = null, pendingDelete = null;
+try { filter = sessionStorage.getItem("wish-filter") || "all"; } catch (e) {}
+
+var EXT = '<svg width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2h6v6M10 2L3 9" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
+function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+function renderHeader(){
+  $("count").textContent = state.items.length;
+  var stores = {}; state.items.forEach(function(it){ it.links.forEach(function(l){ stores[storeName(l.url)] = 1; }); });
+  $("stores-count").textContent = Object.keys(stores).length;
+  var now = new Date(), xmas = new Date(now.getFullYear(), 11, 25);
+  if (now > new Date(now.getFullYear(), 11, 26)) xmas = new Date(now.getFullYear() + 1, 11, 25);
+  var days = Math.ceil((xmas - new Date(now.getFullYear(), now.getMonth(), now.getDate())) / 864e5);
+  $("countdown").textContent = days <= 0 ? "Merry Christmas!" : days + (days === 1 ? " sleep" : " sleeps") + " till Christmas";
+  var L = $("lights"); if (!L.childElementCount) {
+    var cols = ["#ff5a52","#f2c14e","#6fcf97","#5aa9ff"];
+    for (var i = 0; i < 40; i++) { var b = el("i"); b.style.left = (i * 36 + 14) + "px"; b.style.color = cols[i % 4]; b.style.animationDelay = (i % 3) * 0.8 + "s"; L.appendChild(b); }
+    L.style.overflow = "hidden";
+  }
+}
+function renderFilters(){
+  var f = $("filters"); f.textContent = "";
+  CATS.forEach(function(c){
+    var n = c[0] === "all" ? state.items.length : state.items.filter(function(it){ return (ICONS[it.icon] || ICONS.gift).cat === c[0]; }).length;
+    if (!n) return;
+    var b = el("button", "chip", c[1] + " · " + n); b.type = "button";
+    b.setAttribute("aria-pressed", String(filter === c[0]));
+    b.onclick = function(){ filter = c[0]; try { sessionStorage.setItem("wish-filter", filter); } catch (e) {} renderFilters(); renderGrid(); };
+    f.appendChild(b);
+  });
+}
+function renderGrid(){
+  var g = $("grid"); g.textContent = "";
+  var items = state.items.slice().sort(function(a, b){ return (b.top ? 1 : 0) - (a.top ? 1 : 0); })
+    .filter(function(it){ return filter === "all" || (ICONS[it.icon] || ICONS.gift).cat === filter; });
+  if (!items.length) { g.appendChild(el("p", "empty", canEdit ? "No wishes yet. Tap “Add a wish” to start the list." : "Nothing here yet.")); return; }
+  items.forEach(function(it){
+    var card = el("article", "card" + (it.top ? " top" : ""));
+    var tile = el("div", "tile " + "abc"[hash(it.id) % 3]);
+    var img = el("img"); img.src = iconURL(it.icon, it.id); img.alt = (ICONS[it.icon] || ICONS.gift).label + " pixel icon";
+    tile.appendChild(img); card.appendChild(tile);
+    var body = el("div", "body");
+    if (it.top) { var bd = el("div", "badges"); bd.appendChild(el("span", "badge top", "★ TOP PICK")); body.appendChild(bd); }
+    body.appendChild(el("h3", "title", it.title));
+    if (it.note) body.appendChild(el("p", "note", it.note));
+    if (it.links.length) {
+      var st = el("div", "stores");
+      it.links.forEach(function(l){
+        var a = el("a", "store"); a.href = l.url; a.target = "_blank"; a.rel = "noopener noreferrer";
+        var sn = storeName(l.url); a.title = sn + (l.label ? " · " + l.label : "");
+        a.appendChild(el("span", null, l.label ? sn + " · " + l.label : sn)); a.insertAdjacentHTML("beforeend", EXT);
+        st.appendChild(a);
+      });
+      body.appendChild(st);
+    }
+    if (canEdit) {
+      var ow = el("div", "owner");
+      var e1 = el("button", "btn ghost small", "Edit"); e1.type = "button"; e1.onclick = function(){ openEditor(it); };
+      var e2 = el("button", "btn ghost small", it.top ? "Unstar" : "★ Top pick"); e2.type = "button";
+      e2.onclick = function(){ it.top = !it.top; changed(); };
+      var e3 = el("button", "btn ghost small", pendingDelete === it.id ? "Tap again to delete" : "Delete"); e3.type = "button";
+      if (pendingDelete === it.id) { e3.style.color = "var(--accent)"; e3.style.borderColor = "var(--accent)"; }
+      e3.onclick = function(){
+        if (pendingDelete === it.id) { state.items = state.items.filter(function(x){ return x.id !== it.id; }); pendingDelete = null; changed(); }
+        else { pendingDelete = it.id; renderGrid(); }
+      };
+      ow.appendChild(e1); ow.appendChild(e2); ow.appendChild(e3); body.appendChild(ow);
+    }
+    card.appendChild(body); g.appendChild(card);
+  });
+}
+function renderAll(){ renderHeader(); renderFilters(); renderGrid(); }
+
+/* ---------- editor ---------- */
+var chosenIcon = "auto";
+function currentIcon(){ return chosenIcon === "auto" ? guessIcon($("f-title").value + " " + $("f-note").value + " " + $("f-links").value) : chosenIcon; }
+function updatePreview(){
+  var k = currentIcon(); $("preview-img").src = iconURL(k, editingId || "new"); $("preview-label").textContent = (ICONS[k] || ICONS.gift).label + (chosenIcon === "auto" ? " (auto)" : "");
+}
+function buildPicker(){
+  var p = $("iconpick"); p.textContent = "";
+  var a = el("button", "auto", "Auto"); a.type = "button"; a.setAttribute("aria-pressed", String(chosenIcon === "auto"));
+  a.onclick = function(){ chosenIcon = "auto"; buildPicker(); updatePreview(); }; p.appendChild(a);
+  ICON_ORDER.forEach(function(k){
+    var b = el("button"); b.type = "button"; b.title = ICONS[k].label; b.setAttribute("aria-label", ICONS[k].label);
+    b.setAttribute("aria-pressed", String(chosenIcon === k));
+    var i = el("img"); i.src = iconURL(k, "pick"); i.alt = ""; b.appendChild(i);
+    b.onclick = function(){ chosenIcon = k; buildPicker(); updatePreview(); }; p.appendChild(b);
+  });
+}
+function openEditor(it){
+  editingId = it ? it.id : null;
+  $("editor-title").textContent = it ? "Edit wish" : "Add a wish";
+  $("f-title").value = it ? it.title : ""; $("f-note").value = it ? it.note : "";
+  $("f-links").value = it ? it.links.map(function(l){ return (l.label ? l.label + " | " : "") + l.url; }).join("\n") : "";
+  $("f-top").checked = it ? !!it.top : false;
+  chosenIcon = it ? it.icon : "auto";
+  buildPicker(); updatePreview();
+  $("editor").hidden = false; $("f-title").focus(); $("editor").scrollIntoView({behavior:"smooth", block:"start"});
+}
+function closeEditor(){ $("editor").hidden = true; editingId = null; }
+["f-title","f-note","f-links"].forEach(function(id){ $(id).addEventListener("input", function(){ if (chosenIcon === "auto") updatePreview(); }); });
+$("f-cancel").onclick = closeEditor;
+$("add-btn").onclick = function(){ openEditor(null); };
+$("editor").addEventListener("submit", function(ev){
+  ev.preventDefault();
+  var title = $("f-title").value.trim(); if (!title) return;
+  var links = $("f-links").value.split(/\n+/).map(function(line){
+    line = line.trim(); if (!line) return null;
+    var label = "", url = line, m = line.match(/^(.*?)\s*\|\s*(https?:\/\/\S+)$/i);
+    if (m) { label = m[1].trim(); url = m[2]; } else { var u = line.match(/https?:\/\/\S+/i); if (!u) return null; url = u[0]; }
+    url = cleanURL(url); return url ? {url:url, label:label} : null;
+  }).filter(Boolean);
+  var data = {title:title, note:$("f-note").value.trim(), icon:currentIcon(), top:$("f-top").checked, links:links};
+  if (editingId) { var it = state.items.find(function(x){ return x.id === editingId; }); Object.assign(it, data); }
+  else { state.items.unshift(Object.assign({id:"w" + Date.now().toString(36)}, data)); }
+  closeEditor(); changed();
+});
+
+/* ---------- saving: republish the page with the new list ---------- */
+var saveTimer = null, saving = false;
+function setStatus(t){ $("status").textContent = t; }
+function changed(){ renderAll(); setStatus("Saving…"); clearTimeout(saveTimer); saveTimer = setTimeout(save, 900); }
+function buildDocument(){
+  var rs = document.head.querySelector("style"); var reset = rs ? rs.textContent : RESET_FALLBACK;
+  var json = JSON.stringify(state).replace(/</g, "\\u003c");
+  var body = SOURCE.map(function(p){ return typeof p === "string" ? p : '<script type="application/json" id="wish-data">' + json + "<\/script>"; }).join("");
+  return '<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>' + reset + "</style></head><body>" + body + "</body></html>";
+}
+function save(){
+  if (!artifact || saving) return; saving = true;
+  try { sessionStorage.setItem("wish-filter", filter); } catch (e) {}
+  artifact.publish(buildDocument()).then(function(){ setStatus("Saved"); }, function(err){
+    var c = err && err.code;
+    if (c === "conflict") setStatus("Someone saved first. Reloading…");
+    else if (c === "not_writer" || c === "not_granted" || c === "not_declared" || c === "consent_required" || c === "capability_disabled") { canEdit = false; $("add-btn").hidden = true; renderAll(); setStatus("This view is read-only."); }
+    else if (c === "rate_limited") { setStatus("Saving too fast. Retrying shortly…"); setTimeout(save, 5000); }
+    else setStatus("Couldn't save. Try that change again.");
+  }).then(function(){ saving = false; });
+}
+
+renderAll();
+
+/* ---------- light up editing for the list owner ---------- */
+if (window.claude && typeof window.claude.use === "function") {
+  Promise.all([window.claude.use("artifact"), window.claude.use("user")]).then(function(r){
+    artifact = r[0]; var user = r[1];
+    if (!artifact || !user) return false;
+    return Promise.all([user.isOwner(), user.canEdit()]).then(function(v){ return v[0] || v[1]; });
+  }).then(function(ok){
+    if (!ok) return; canEdit = true; $("add-btn").hidden = false; renderGrid();
+  }).catch(function(){});
+}
+})();
+</script>
